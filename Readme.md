@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
-* Студент: [Kate M](https://up.htmlacademy.ru/javascript/6/user/70920).
-* Наставник: `Неизвестно`.
+* Студентка: [Kate M](https://up.htmlacademy.ru/javascript/6/user/70920)
+* Наставник: [Сергей Вейт]
 
 ---
 
