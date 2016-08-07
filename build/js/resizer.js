@@ -98,6 +98,7 @@
       // Смещение первого штриха от начала линии.
       this._ctx.lineDashOffset = 7;
 
+
       // Сохранение состояния канваса.
       this._ctx.save();
 
@@ -106,6 +107,7 @@
 
       var displX = -(this._resizeConstraint.x + this._resizeConstraint.side / 2);
       var displY = -(this._resizeConstraint.y + this._resizeConstraint.side / 2);
+
       // Отрисовка изображения на холсте. Параметры задают изображение, которое
       // нужно отрисовать и координаты его верхнего левого угла.
       // Координаты задаются от центра холста.
@@ -115,10 +117,10 @@
       this._ctx.fillStyle = 'rgba(0,0,0,.8)';
       this._ctx.beginPath();
       //this._ctx.strokeStyle = 'red';
-      this._ctx.moveTo(-this._container.width / 2, -this._container.height/2);
-      this._ctx.lineTo(this._container.width/2, -this._container.height/2);
-      this._ctx.lineTo(this._container.width/2, this._container.height/2);
-      this._ctx.lineTo(-this._container.width, this._container.height/2);
+      this._ctx.moveTo(-this._container.width / 2, -this._container.height / 2);
+      this._ctx.lineTo(this._container.width / 2, -this._container.height / 2);
+      this._ctx.lineTo(this._container.width / 2, this._container.height / 2);
+      this._ctx.lineTo(-this._container.width, this._container.height / 2);
 
       this._ctx.moveTo(
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
@@ -137,11 +139,79 @@
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+      //this._ctx.strokeRect(
+      //    (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+      //    (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+      //    this._resizeConstraint.side - this._ctx.lineWidth / 2,
+      //    this._resizeConstraint.side - this._ctx.lineWidth / 2);
+
+      //Отрисовка прямоугольника, обозначающего область изображения после
+      // кадрирования точками
+      var step = 6;
+      var diameter = 3;
+
+      roundDrawLine( //верхняя линия
+        this._ctx,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        step,
+        diameter);
+      roundDrawLine( //правая вертикальная линия
+        this._ctx,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        step,
+        diameter);
+      roundDrawLine( //левая вертикальная линия
+        this._ctx,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        step,
+        diameter);
+      roundDrawLine( //нижняя линия
+        this._ctx,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        step,
+        diameter);
+
+      //Отрисовка линии точками
+      function roundDrawLine(ctx, roundXStart, roundYStart, roundXEnd, roundYEnd, step, diameter){
+        var x;
+        var y;
+        if (roundYStart === roundYEnd) {
+          x = 0 + roundXStart;
+          y = 0 + roundYStart;
+          while (x < roundXEnd) {
+            roundDraw(ctx, x, y, diameter);
+            x += diameter + step;
+          }
+        }
+        if (roundXStart === roundXEnd) {
+          x = 0 + roundXStart;
+          y = 0 + roundYStart;
+          while (y < roundYEnd) {
+            roundDraw(ctx, x, y, diameter);
+            y += diameter + step;
+          }
+        }
+      }
+
+      //Отрисовка точки
+      function roundDraw(ctx,roundXStart,roundYStart,diameter) {
+        ctx.fillStyle = '#ffe753';
+        ctx.beginPath();
+        ctx.arc(roundXStart,roundYStart,diameter, 0, Math.PI * 2, true);
+        ctx.fill();
+      }
 
       // Сохранение состояния канваса.
       this._ctx.save();
