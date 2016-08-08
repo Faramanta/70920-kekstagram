@@ -184,13 +184,13 @@
         diameter);
 
       //Отрисовка линии точками
-      function roundDrawLine(ctx, roundXStart, roundYStart, roundXEnd, roundYEnd, step, diameter){
+      function roundDrawLine(ctx, roundXStart, roundYStart, roundXEnd, roundYEnd) {
         var x;
         var y;
         if (roundYStart === roundYEnd) {
           x = 0 + roundXStart;
           y = 0 + roundYStart;
-          while (x < roundXEnd) {
+          while (x <= roundXEnd) {
             roundDraw(ctx, x, y, diameter);
             x += diameter + step;
           }
@@ -198,7 +198,7 @@
         if (roundXStart === roundXEnd) {
           x = 0 + roundXStart;
           y = 0 + roundYStart;
-          while (y < roundYEnd) {
+          while (y <= roundYEnd) {
             roundDraw(ctx, x, y, diameter);
             y += diameter + step;
           }
@@ -206,15 +206,12 @@
       }
 
       //Отрисовка точки
-      function roundDraw(ctx,roundXStart,roundYStart,diameter) {
+      function roundDraw(ctx, roundXStart, roundYStart) {
         ctx.fillStyle = '#ffe753';
         ctx.beginPath();
-        ctx.arc(roundXStart,roundYStart,diameter, 0, Math.PI * 2, true);
+        ctx.arc(roundXStart, roundYStart, diameter, 0, Math.PI * 2, true);
         ctx.fill();
       }
-
-      // Сохранение состояния канваса.
-      this._ctx.save();
 
       //Вывод размера кадрируемого изображения
       this._ctx.fillStyle = '#ffffff';
@@ -222,7 +219,7 @@
       this._ctx.textAlign = 'center';
       this._ctx.fillText(
         this._image.naturalWidth + 'x' + this._image.naturalHeight,
-        0, (-this._resizeConstraint.side / 2)- (this._ctx.lineWidth + 8)
+        0, (-this._resizeConstraint.side / 2) - (this._ctx.lineWidth + 8)
       );
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
