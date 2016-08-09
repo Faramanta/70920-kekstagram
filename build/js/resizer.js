@@ -137,82 +137,6 @@
       //this._ctx.stroke();
       this._ctx.fill('evenodd');
 
-      // Отрисовка прямоугольника, обозначающего область изображения после
-      // кадрирования, пунктиром. Координаты задаются от центра.
-      //this._ctx.strokeRect(
-      //    (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-      //    (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-      //    this._resizeConstraint.side - this._ctx.lineWidth / 2,
-      //    this._resizeConstraint.side - this._ctx.lineWidth / 2);
-
-      //Отрисовка прямоугольника, обозначающего область изображения после
-      // кадрирования, точками
-      /* var step = 6;
-      var diameter = 3;
-
-      roundDrawLine( //верхняя линия
-        this._ctx,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        step,
-        diameter);
-      roundDrawLine( //правая вертикальная линия
-        this._ctx,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        step,
-        diameter);
-      roundDrawLine( //левая вертикальная линия
-        this._ctx,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        step,
-        diameter);
-      roundDrawLine( //нижняя линия
-        this._ctx,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        step,
-        diameter);
-
-      //Отрисовка линии точками
-      function roundDrawLine(ctx, roundXStart, roundYStart, roundXEnd, roundYEnd) {
-        var x;
-        var y;
-        if (roundYStart === roundYEnd) {
-          x = 0 + roundXStart;
-          y = 0 + roundYStart;
-          while (x <= roundXEnd) {
-            roundDraw(ctx, x, y, diameter);
-            x += diameter + step;
-          }
-        }
-        if (roundXStart === roundXEnd) {
-          x = 0 + roundXStart;
-          y = 0 + roundYStart;
-          while (y <= roundYEnd) {
-            roundDraw(ctx, x, y, diameter);
-            y += diameter + step;
-          }
-        }
-      }
-
-      //Отрисовка точки
-      function roundDraw(ctx, roundXStart, roundYStart) {
-        ctx.fillStyle = '#ffe753';
-        ctx.beginPath();
-        ctx.arc(roundXStart, roundYStart, diameter, 0, Math.PI * 2, true);
-        ctx.fill();
-      }*/
-
       //Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования, зигзагом
       zigzagDrawLine( //верхняя линия
@@ -223,9 +147,9 @@
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
       zigzagDrawLine( //правая вертикальная линия
         this._ctx,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2+12,
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2+12,
         (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
       zigzagDrawLine( //левая линия
         this._ctx,
@@ -235,10 +159,10 @@
         (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
       zigzagDrawLine( //нижняя линия
         this._ctx,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2 +12,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2 + 12,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2-6,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2 + 12);
 
       //Отрисовка линии зигзагом
       function zigzagDrawLine(ctx, zigzagXStart, zigzagYStart, zigzagXEnd, zigzagYEnd) {
@@ -247,7 +171,7 @@
         if (zigzagYStart === zigzagYEnd) {
           x = 0 + zigzagXStart;
           y = 0 + zigzagYStart;
-          while (x < zigzagXEnd) {
+          while (x < zigzagXEnd+6) {
             zigzagDrawHorizontal(ctx, x, y);
             x += 24;
           }
@@ -255,7 +179,7 @@
         if (zigzagXStart === zigzagXEnd) {
           x = 0 + zigzagXStart;
           y = 0 + zigzagYStart;
-          while (y < zigzagYEnd) {
+          while (y < zigzagYEnd+6) {
             zigzagDrawVertical(ctx, x, y);
             y += 24;
           }
@@ -268,9 +192,9 @@
         ctx.lineWidth = 3;
         ctx.setLineDash([15, 0]);
         ctx.beginPath();
-        ctx.moveTo(zigzagXStart, zigzagYStart + 6);
-        ctx.lineTo(zigzagXStart + 12, zigzagYStart - 6);
-        ctx.lineTo(zigzagXStart + 24, zigzagYStart + 6);
+        ctx.moveTo(zigzagXStart-12, zigzagYStart );
+        ctx.lineTo(zigzagXStart, zigzagYStart - 12);
+        ctx.lineTo(zigzagXStart +12, zigzagYStart );
         ctx.stroke();
       }
 
@@ -280,9 +204,9 @@
         ctx.lineWidth = 3;
         ctx.setLineDash([15, 0]);
         ctx.beginPath();
-        ctx.moveTo(zigzagXStart + 6, zigzagYStart);
-        ctx.lineTo(zigzagXStart - 6, zigzagYStart + 12);
-        ctx.lineTo(zigzagXStart + 6, zigzagYStart + 24);
+        ctx.moveTo(zigzagXStart-2 , zigzagYStart-12);
+        ctx.lineTo(zigzagXStart - 14, zigzagYStart );
+        ctx.lineTo(zigzagXStart-2, zigzagYStart + 12);
         ctx.stroke();
       }
 
