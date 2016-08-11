@@ -67,12 +67,37 @@
     backgroundElement.style.backgroundImage = 'url(' + images[randomImageNumber] + ')';
   }
 
+  var leftInput = document.querySelector('#resize-x');
+  var topInput = document.querySelector('#resize-y');
+  //var sizeInput = document.querySelector('#resize-size');
+  var btnNextPage = document.querySelector('#resize-fwd');
+  //var imgNaturalWidth = currentResizer._image.naturalWidth;
+  //var imgNaturalHeight = currentResizer._image.naturalHeight;
+
+  function disabledBtn() {
+    if (resizeFormIsValid()) {
+      btnNextPage.disabled = false;
+    } else {
+      btnNextPage.disabled = true;
+    }
+  }
+
+  leftInput.oninput = disabledBtn;
+  topInput.oninput = disabledBtn;
+
   /**
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
   function resizeFormIsValid() {
-    return true;
+    if ((leftInput.value >= 0)
+      && (topInput.value >= 0)
+      //&& ((leftInput.value + sizeInput.value) <=  currentResizer._image.naturalWidth)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -161,6 +186,7 @@
 
           hideMessage();
         };
+
 
         fileReader.readAsDataURL(element.files[0]);
       } else {
