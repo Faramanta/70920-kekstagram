@@ -69,10 +69,8 @@
 
   var leftInput = document.querySelector('#resize-x');
   var topInput = document.querySelector('#resize-y');
-  //var sizeInput = document.querySelector('#resize-size');
+  var sizeInput = document.querySelector('#resize-size');
   var btnNextPage = document.querySelector('#resize-fwd');
-  //var imgNaturalWidth = currentResizer._image.naturalWidth;
-  //var imgNaturalHeight = currentResizer._image.naturalHeight;
 
   function disabledBtn() {
     if (resizeFormIsValid()) {
@@ -84,16 +82,28 @@
 
   leftInput.oninput = disabledBtn;
   topInput.oninput = disabledBtn;
+  sizeInput.oninput = disabledBtn;
+
+  leftInput.value = 0;
+  topInput.value = 0;
+  sizeInput.value = 100;
 
   /**
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
   function resizeFormIsValid() {
-    if ((leftInput.value >= 0)
-      && (topInput.value >= 0)
-      //&& ((leftInput.value + sizeInput.value) <=  currentResizer._image.naturalWidth)
-    ) {
+    var imgNaturalWidth = currentResizer._image.naturalWidth;
+    var imgNaturalHeight = currentResizer._image.naturalHeight;
+    var left = parseInt(leftInput.value, 10);
+    var top = parseInt(topInput.value, 10);
+    var size = parseInt(sizeInput.value, 10);
+
+    if (left >= 0
+      && top >= 0
+      && left + size <= imgNaturalWidth
+      && top + size <= imgNaturalHeight
+      && size <= imgNaturalWidth) {
       return true;
     } else {
       return false;
