@@ -31,7 +31,8 @@
     "build": "webpack --config ./bin/webpack.config.js",
     "start": "node ./bin/server.js",
     "test": "eslint src",
-    "unittest": "node tests/lib/index.js"
+    "unittest": "node tests/lib/index.js",
+    "browser-cookies": "1.0.3"
   },
   "engines": {
     "node": "^5.11.0"

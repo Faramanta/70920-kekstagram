@@ -255,6 +255,23 @@
     resizeForm.classList.remove('invisible');
   };
 
+  var browserCookies = require('browser-cookies');
+
+  //Срок жизни cookie - кол-во дней с последнего дня рождения Грейс Хоппер (9 декабря 1906г.)
+  function fromGraceHopperBirthday() {
+    var today = new Date();
+    var GraceHopperBirthday = new Date(today.getFullYear(), 11, 9);
+    var countDay;
+
+    if (today.getMonth()- GraceHopperBirthday.getMonth() < 0) {
+      GraceHopperBirthday.setFullYear(GraceHopperBirthday.getFullYear()-1);
+      countDay = (today - GraceHopperBirthday)/86400000;
+    } else
+      countDay = (today - GraceHopperBirthday)/86400000;
+  }
+
+
+  fromGraceHopperBirthday();
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
