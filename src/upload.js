@@ -255,23 +255,7 @@
     resizeForm.classList.remove('invisible');
   };
 
-  var browserCookies = require('browser-cookies');
 
-  //Срок жизни cookie - кол-во дней с последнего дня рождения Грейс Хоппер (9 декабря 1906г.)
-  function fromGraceHopperBirthday() {
-    var today = new Date();
-    var GraceHopperBirthday = new Date(today.getFullYear(), 11, 9);
-    var countDay;
-
-    if (today.getMonth()- GraceHopperBirthday.getMonth() < 0) {
-      GraceHopperBirthday.setFullYear(GraceHopperBirthday.getFullYear()-1);
-      countDay = (today - GraceHopperBirthday)/86400000;
-    } else
-      countDay = (today - GraceHopperBirthday)/86400000;
-  }
-
-
-  fromGraceHopperBirthday();
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
@@ -312,8 +296,36 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+
+    saveFilterInCookie(selectedFilter);
   };
+
+  var browserCookies = require('browser-cookies');
+
+  //Формирование и запись куки
+  function saveFilterInCookie(nameFilter) {
+    var today = new Date();
+    var GraceHopperBirthday = new Date(today.getFullYear(), 11, 9);
+    var countDay;
+
+  //срок жизни куки
+    if (today.getMonth() - GraceHopperBirthday.getMonth() < 0) {
+      GraceHopperBirthday.setFullYear(GraceHopperBirthday.getFullYear() - 1);
+      countDay = Math.floor((today - GraceHopperBirthday) / 86400000);
+    } else {
+      countDay = Math.floor((today - GraceHopperBirthday) / 86400000);
+    }
+
+    document.cookie = browserCookies.set('upload-filter', nameFilter, {expires: countDay});
+
+  }
+
+  //возвращае имя фильтра из куки
+  //function getFilterFromCookie() {
+  //  var nameFilter = browserCookies.get('upload-filter');
+  //}
 
   cleanupResizer();
   updateBackground();
 })();
+
