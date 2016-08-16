@@ -311,21 +311,27 @@
   //срок жизни куки
     if (today.getMonth() - GraceHopperBirthday.getMonth() < 0) {
       GraceHopperBirthday.setFullYear(GraceHopperBirthday.getFullYear() - 1);
-      countDay = Math.floor((today - GraceHopperBirthday) / 86400000);
-    } else {
-      countDay = Math.floor((today - GraceHopperBirthday) / 86400000);
     }
-
+    countDay = Math.floor((today - GraceHopperBirthday) / 86400000);
     document.cookie = browserCookies.set('upload-filter', nameFilter, {expires: countDay});
-
   }
 
   //возвращае имя фильтра из куки
-  //function getFilterFromCookie() {
-  //  var nameFilter = browserCookies.get('upload-filter');
-  //}
+  function getFilterFromCookie() {
+    var nameFilter = browserCookies.get('upload-filter');
+    if (!nameFilter) {
+      return;
+    }
+
+    [].filter.call(filterForm['upload-filter'], function(item) {
+      item.checked = (item.value === nameFilter);
+    });
+
+    filterForm.onchange();
+  }
 
   cleanupResizer();
   updateBackground();
+  getFilterFromCookie();
 })();
 
