@@ -6,11 +6,10 @@ function __jsonpCallback(url, call) {
   scriptEl.src = url + '?callback=' + call;
 }
 
-var pictures = [];
-var getPictures = function(data) {
-  pictures = data;
+window.getPictures = function(data) {
+  window.pictures = data;
 };
 
-__jsonpCallback('http://localhost:1506/api/pictures', getPictures);
+__jsonpCallback('http://localhost:1506/api/pictures', 'getPictures');
 
 
