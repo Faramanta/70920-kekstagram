@@ -10,11 +10,6 @@ window.getPictures = function(data) {
   window.pictures = data;
 };
 
-//var pictures = [];
-//var getPictures = function(data) {
-//  pictures = data;
-//};
-
 function filterHidden() {
   var filter = document.querySelector('.filters');
 
@@ -53,7 +48,7 @@ var getPictureElement = function(data, container) {
 
   //обработчик ошибки загрузки
   backgroundImage.onError = function() {
-    element.classList.add('.picture-load-failure');
+    element.classList.add('picture-load-failure');
   };
 
   backgroundImage.src = data.url;
@@ -61,7 +56,7 @@ var getPictureElement = function(data, container) {
   //таймер
   backgroundLoadTimeout = setTimeout(function() {
     backgroundImage.src = '';
-    element.classList.add('.picture-load-failure');
+    element.classList.add('picture-load-failure');
   }, IMAGE_LOAD_TIMEOUT);
 
   return element;
