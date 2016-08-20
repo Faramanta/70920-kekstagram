@@ -6,8 +6,8 @@ var pictures = [];
 
 window.getPictures = function(data) {
   pictures = data;
-  pictures.forEach(function(data) {
-    getPictureElement(data, picturesContainer);
+  pictures.forEach(function(picture) {
+    getPictureElement(picture, picturesContainer);
   });
 };
 
