@@ -1,15 +1,25 @@
 'use strict';
 
+var IMAGE_LOAD_TIMEOUT = 10000;
+
+var pictures = [];
+
+window.getPictures = function(data) {
+  pictures = data;
+  pictures.forEach(function(data) {
+    getPictureElement(data, picturesContainer);
+  });
+};
+
 function __jsonpCallback(url, call) {
   var scriptEl = document.createElement('script');
   document.body.appendChild(scriptEl);
   scriptEl.src = url + '?callback=' + call;
 }
 
-window.getPictures = function(data) {
-  window.pictures = data;
-};
+__jsonpCallback('http://localhost:1506/api/pictures', 'getPictures');
 
+//скрыть фильтры
 function filterHidden() {
   var filter = document.querySelector('.filters');
 
@@ -17,6 +27,8 @@ function filterHidden() {
     filter.classList.add('hidden');
   }
 }
+
+filterHidden();
 
 var picturesContainer = document.querySelector('.pictures');
 var templateElement = document.querySelector('#picture-template');
@@ -27,8 +39,6 @@ if ('content' in templateElement) {
 } else {
   elementToClone = templateElement.querySelector('.picture');
 }
-
-var IMAGE_LOAD_TIMEOUT = 10000;
 
 var getPictureElement = function(data, container) {
   var element = elementToClone.cloneNode(true);
@@ -62,9 +72,14 @@ var getPictureElement = function(data, container) {
   return element;
 };
 
-pictures.forEach(function(data) {
-  getPictureElement(data, picturesContainer);
-});
+function filterBlock() {
+  var filter = document.querySelector('.filters');
 
-__jsonpCallback('http://localhost:1506/api/pictures', 'getPictures');
-filterHidden();
+  if (filter.classList.contains('hidden')) {
+    filter.classList.remove('hidden');
+  }
+}
+filterBlock();
+
+
+
