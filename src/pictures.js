@@ -2,6 +2,8 @@
 
 var IMAGE_LOAD_TIMEOUT = 10000;
 
+var __jsonpCallback = require('./load');
+
 var pictures = [];
 
 window.getPictures = function(data) {
@@ -10,12 +12,6 @@ window.getPictures = function(data) {
     getPictureElement(picture, picturesContainer);
   });
 };
-
-function __jsonpCallback(url, call) {
-  var scriptEl = document.createElement('script');
-  document.body.appendChild(scriptEl);
-  scriptEl.src = url + '?callback=' + call;
-}
 
 __jsonpCallback('http://localhost:1506/api/pictures', 'getPictures');
 
@@ -40,37 +36,7 @@ if ('content' in templateElement) {
   elementToClone = templateElement.querySelector('.picture');
 }
 
-var getPictureElement = function(data, container) {
-  var element = elementToClone.cloneNode(true);
-  element.querySelector('.picture-comments').textContent = data.comments;
-  element.querySelector('.picture-likes').textContent = data.likes;
-  container.appendChild(element);
-
-  var backgroundImage = new Image();
-  var backgroundLoadTimeout;
-
-  //обработчик успешной загрузки
-  backgroundImage.onload = function(evt) {
-    clearTimeout(backgroundLoadTimeout);
-    element.style.backgroundImage = 'url(\'' + evt.target.src + '\')';
-    element.style.backgroundSize = '182px';
-  };
-
-  //обработчик ошибки загрузки
-  backgroundImage.onError = function() {
-    element.classList.add('picture-load-failure');
-  };
-
-  backgroundImage.src = data.url;
-
-  //таймер
-  backgroundLoadTimeout = setTimeout(function() {
-    backgroundImage.src = '';
-    element.classList.add('picture-load-failure');
-  }, IMAGE_LOAD_TIMEOUT);
-
-  return element;
-};
+var getPictureElement = require('./picture');
 
 function filterBlock() {
   var filter = document.querySelector('.filters');
