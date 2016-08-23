@@ -1,4 +1,5 @@
 'use strict';
+
 var IMAGE_LOAD_TIMEOUT = 10000;
 
 var templateElement = document.querySelector('#picture-template');
@@ -11,7 +12,7 @@ if ('content' in templateElement) {
 }
 
 define(function() {
-  return function(data, container) {
+  return function getPictureElement(data, container) {
     var element = elementToClone.cloneNode(true);
     element.querySelector('.picture-comments').textContent = data.comments;
     element.querySelector('.picture-likes').textContent = data.likes;
