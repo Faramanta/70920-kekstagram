@@ -1,26 +1,25 @@
 'use strict';
-var picturesContainer = document.querySelector('.pictures');
-var filter = document.querySelector('.filters');
 
-window.getPictures = function(pictures) {
-  pictures.forEach(function() {
-    define(['./picture'], function(picture) {
-      picture(picture, picturesContainer);
+define(['./load', './picture'], function(
+  load, renderPictureElement) {
+
+  var picturesContainer = document.querySelector('.pictures');
+  var filter = document.querySelector('.filters');
+
+  window.getPictures = function(pictures) {
+    pictures.forEach(function(picture) {
+      renderPictureElement(picture, picturesContainer);
     });
-  });
-};
+  };
 
-define(['./load'], function(load) {
   load('http://localhost:1506/api/pictures', 'getPictures');
-});
 
-//скрыть фильтры
-if (!filter.classList.contains('hidden')) {
-  filter.classList.add('hidden');
-}
+  //скрыть фильтры
+  if (!filter.classList.contains('hidden')) {
+    filter.classList.add('hidden');
+  }
 
-define(function() {
+  filter.classList.remove('hidden');
+
   return picturesContainer;
 });
-
-filter.classList.remove('hidden');
