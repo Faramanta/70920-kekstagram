@@ -443,6 +443,9 @@ input[type=radio]:checked + .upload-filter-label .upload-filter-preview {
 }
 
 .picture-stats {
+  position: relative;
+  top: -35px;
+
   display: none;
   padding: 0 10px;
 

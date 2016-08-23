@@ -1,34 +1,45 @@
 'use strict';
+var IMAGE_LOAD_TIMEOUT = 10000;
 
+var templateElement = document.querySelector('#picture-template');
+var elementToClone;
 
-module.exports = function(data, container) {
-  var element = elementToClone.cloneNode(true);
-  element.querySelector('.picture-comments').textContent = data.comments;
-  element.querySelector('.picture-likes').textContent = data.likes;
-  container.appendChild(element);
+if ('content' in templateElement) {
+  elementToClone = templateElement.content.querySelector('.picture');
+} else {
+  elementToClone = templateElement.querySelector('.picture');
+}
 
-  var backgroundImage = new Image();
-  var backgroundLoadTimeout;
+define(function() {
+  return function(data, container) {
+    var element = elementToClone.cloneNode(true);
+    element.querySelector('.picture-comments').textContent = data.comments;
+    element.querySelector('.picture-likes').textContent = data.likes;
+    container.appendChild(element);
 
-  //обработчик успешной загрузки
-  backgroundImage.onload = function(evt) {
-    clearTimeout(backgroundLoadTimeout);
-    element.style.backgroundImage = 'url(\'' + evt.target.src + '\')';
-    element.style.backgroundSize = '182px';
-  };
+    var backgroundImage = new Image();
+    var backgroundLoadTimeout;
+
+  // обработчик успешной загрузки
+    backgroundImage.onload = function(evt) {
+      clearTimeout(backgroundLoadTimeout);
+      element.style.backgroundImage = 'url(\'' + evt.target.src + '\')';
+      element.style.backgroundSize = '182px';
+    };
 
   //обработчик ошибки загрузки
-  backgroundImage.onError = function() {
-    element.classList.add('picture-load-failure');
-  };
+    backgroundImage.onError = function() {
+      element.classList.add('picture-load-failure');
+    };
 
-  backgroundImage.src = data.url;
+    backgroundImage.src = data.url;
 
   //таймер
-  backgroundLoadTimeout = setTimeout(function() {
-    backgroundImage.src = '';
-    element.classList.add('picture-load-failure');
-  }, IMAGE_LOAD_TIMEOUT);
+    backgroundLoadTimeout = setTimeout(function() {
+      backgroundImage.src = '';
+      element.classList.add('picture-load-failure');
+    }, IMAGE_LOAD_TIMEOUT);
 
-  return element;
-};
+    return element;
+  };
+});

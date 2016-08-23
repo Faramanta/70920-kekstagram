@@ -1,11 +1,9 @@
 'use strict';
 
-
-module.exports = function __jsonpCallback(url, call) {
+define(function() {
+  return function(url, call) {
     var scriptEl = document.createElement('script');
     document.body.appendChild(scriptEl);
     scriptEl.src = url + '?callback=' + call;
   };
-
-
-
+});
