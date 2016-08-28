@@ -1,15 +1,17 @@
 'use strict';
 
-define(['./load', './picture'], function(
-  load, renderPictureElement) {
+define(['./load', './picture', './gallery'], function(
+  load, renderPictureElement, gallery) {
 
   var picturesContainer = document.querySelector('.pictures');
   var filter = document.querySelector('.filters');
 
   window.getPictures = function(pictures) {
-    pictures.forEach(function(picture) {
-      renderPictureElement(picture, picturesContainer);
+    pictures.forEach(function(picture, keyPicture) {
+      renderPictureElement(picture, picturesContainer, keyPicture);
     });
+
+    gallery.setPictures(pictures);
   };
 
   load('http://localhost:1506/api/pictures', 'getPictures');
@@ -22,4 +24,5 @@ define(['./load', './picture'], function(
   filter.classList.remove('hidden');
 
   return picturesContainer;
+
 });

@@ -1,46 +1,55 @@
 'use strict';
 
-var IMAGE_LOAD_TIMEOUT = 10000;
+define(['./gallery'], function(gallery) {
 
-var templateElement = document.querySelector('#picture-template');
-var elementToClone;
+  var IMAGE_LOAD_TIMEOUT = 10000;
 
-if ('content' in templateElement) {
-  elementToClone = templateElement.content.querySelector('.picture');
-} else {
-  elementToClone = templateElement.querySelector('.picture');
-}
+  var templateElement = document.querySelector('#picture-template');
+  var elementToClone;
 
-define(function() {
-  return function getPictureElement(data, container) {
-    var element = elementToClone.cloneNode(true);
-    element.querySelector('.picture-comments').textContent = data.comments;
-    element.querySelector('.picture-likes').textContent = data.likes;
-    container.appendChild(element);
+  if ('content' in templateElement) {
+    elementToClone = templateElement.content.querySelector('.picture');
+  } else {
+    elementToClone = templateElement.querySelector('.picture');
+  }
 
-    var backgroundImage = new Image();
-    var backgroundLoadTimeout;
+  define(function() {
+    return function(data, container, keyPicture) {
+      var element = elementToClone.cloneNode(true);
+      element.querySelector('.picture-comments').textContent = data.comments;
+      element.querySelector('.picture-likes').textContent = data.likes;
+      container.appendChild(element);
 
-  // обработчик успешной загрузки
-    backgroundImage.onload = function(evt) {
-      clearTimeout(backgroundLoadTimeout);
-      element.style.backgroundImage = 'url(\'' + evt.target.src + '\')';
-      element.style.backgroundSize = '182px';
+      var backgroundImage = new Image();
+      var backgroundLoadTimeout;
+
+    // обработчик успешной загрузки
+      backgroundImage.onload = function(evt) {
+        clearTimeout(backgroundLoadTimeout);
+        element.style.backgroundImage = 'url(\'' + evt.target.src + '\')';
+        element.style.backgroundSize = '182px';
+      };
+
+    //обработчик ошибки загрузки
+      backgroundImage.onError = function() {
+        element.classList.add('picture-load-failure');
+      };
+
+      backgroundImage.src = data.url;
+
+    //таймер
+      backgroundLoadTimeout = setTimeout(function() {
+        backgroundImage.src = '';
+        element.classList.add('picture-load-failure');
+      }, IMAGE_LOAD_TIMEOUT);
+
+      //обработчик клика по блоку с фотографией
+      element.onclick = function() {
+        gallery.show(keyPicture);
+
+      };
+
+      return element;
     };
-
-  //обработчик ошибки загрузки
-    backgroundImage.onError = function() {
-      element.classList.add('picture-load-failure');
-    };
-
-    backgroundImage.src = data.url;
-
-  //таймер
-    backgroundLoadTimeout = setTimeout(function() {
-      backgroundImage.src = '';
-      element.classList.add('picture-load-failure');
-    }, IMAGE_LOAD_TIMEOUT);
-
-    return element;
-  };
+  });
 });
