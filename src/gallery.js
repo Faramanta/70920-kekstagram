@@ -58,7 +58,6 @@ define(function() {
     var self = this;
     var nextKeyPicture;
 
-    event.preventDefault();
     this.galleryOverlayImage.onclick = function() {
       if (self.activePicture >= self.activePicture.length - 1) {
         nextKeyPicture = 0;
