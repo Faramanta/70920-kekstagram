@@ -1,18 +1,19 @@
 'use strict';
 
-var IMAGE_LOAD_TIMEOUT = 10000;
+define(['./gallery'], function(gallery) {
 
-var templateElement = document.querySelector('#picture-template');
-var elementToClone;
+  var IMAGE_LOAD_TIMEOUT = 10000;
 
-if ('content' in templateElement) {
-  elementToClone = templateElement.content.querySelector('.picture');
-} else {
-  elementToClone = templateElement.querySelector('.picture');
-}
+  var templateElement = document.querySelector('#picture-template');
+  var elementToClone;
 
-define(function() {
-  return function getPictureElement(data, container) {
+  if ('content' in templateElement) {
+    elementToClone = templateElement.content.querySelector('.picture');
+  } else {
+    elementToClone = templateElement.querySelector('.picture');
+  }
+
+  return function(data, container, keyPicture) {
     var element = elementToClone.cloneNode(true);
     element.querySelector('.picture-comments').textContent = data.comments;
     element.querySelector('.picture-likes').textContent = data.likes;
@@ -41,6 +42,15 @@ define(function() {
       element.classList.add('picture-load-failure');
     }, IMAGE_LOAD_TIMEOUT);
 
+    //обработчик клика по блоку с фотографией
+    element.onclick = function(event) {
+      event.preventDefault();
+
+      gallery.show(keyPicture);
+
+    };
+
     return element;
   };
+
 });

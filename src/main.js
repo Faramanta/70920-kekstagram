@@ -1,3 +1,4 @@
 'use strict';
 
-require(['./pictures', './resizer', './upload']);
+require(['./pictures', './resizer', './upload', './gallery']);
+
