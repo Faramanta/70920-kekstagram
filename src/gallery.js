@@ -33,7 +33,7 @@ define(function() {
   };
 
   Gallery.prototype.setActivePicture = function(keyPicture) {
-    if (keyPicture > this.pictures.length) {
+    if (keyPicture >= this.pictures.length) {
       keyPicture = 0;
     }
 
