@@ -13,44 +13,58 @@ define(['./gallery'], function(gallery) {
     elementToClone = templateElement.querySelector('.picture');
   }
 
-  return function(data, container, keyPicture) {
+  var getPictureElement = function(data) {
     var element = elementToClone.cloneNode(true);
     element.querySelector('.picture-comments').textContent = data.comments;
     element.querySelector('.picture-likes').textContent = data.likes;
-    container.appendChild(element);
 
     var backgroundImage = new Image();
     var backgroundLoadTimeout;
 
-  // обработчик успешной загрузки
+    // обработчик успешной загрузки
     backgroundImage.onload = function(evt) {
       clearTimeout(backgroundLoadTimeout);
       element.style.backgroundImage = 'url(\'' + evt.target.src + '\')';
       element.style.backgroundSize = '182px';
     };
 
-  //обработчик ошибки загрузки
+    //обработчик ошибки загрузки
     backgroundImage.onError = function() {
       element.classList.add('picture-load-failure');
     };
 
     backgroundImage.src = data.url;
 
-  //таймер
+    //таймер
     backgroundLoadTimeout = setTimeout(function() {
       backgroundImage.src = '';
       element.classList.add('picture-load-failure');
     }, IMAGE_LOAD_TIMEOUT);
 
-    //обработчик клика по блоку с фотографией
-    element.onclick = function(event) {
-      event.preventDefault();
-
-      gallery.show(keyPicture);
-
-    };
-
     return element;
   };
 
+  //конструктор
+  var Picture = function(data, picture, keyPicture) {
+    var self = this;
+    this.data = data;
+    this.element = picture;
+    this.key = keyPicture;
+
+    //обработчик клика по блоку с фотографией
+    this.element.onclick = function(event) {
+      event.preventDefault();
+      gallery.show(self.key);
+    };
+
+    //метод, который удаляет обработчики событий
+    this.remove = function() {
+      self.picture.onclick = null;
+    };
+  };
+
+  return {
+    getPictureElement: getPictureElement,
+    Picture: Picture
+  };
 });
