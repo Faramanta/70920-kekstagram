@@ -10,8 +10,9 @@ define(['./load', './picture', './gallery'], function(
   var pageNumber = 0;
   var footer = document.querySelector('footer');
   var activeFilter = 'filter-popular';
-  var GAP = 100;
+  var GAP = 200;
   var THROTTLE_TIMEOUT = 100;
+  var lastCall = Date.now();
 
   var getPictures = function(pictures) {
     if (!filters.classList.contains('hidden')) {
@@ -30,33 +31,40 @@ define(['./load', './picture', './gallery'], function(
     filters.classList.remove('hidden');
   };
 
+  //Достигнут ли низ страницы
+  var pageEnd = function() {
+    return footer.getBoundingClientRect().top - window.innerHeight - GAP <= 0;
+  };
+
   var loadPictures = function(filter, currentPageNumber) {
-    load(PICTURES_LOAD_URL, {
-      from: currentPageNumber * PAGE_SIZE,
-      to: currentPageNumber * PAGE_SIZE + PAGE_SIZE,
-      filter: filter
-    }, getPictures);
+    do {
+      load(PICTURES_LOAD_URL, {
+        from: currentPageNumber * PAGE_SIZE,
+        to: currentPageNumber * PAGE_SIZE + PAGE_SIZE,
+        filter: filter
+      }, getPictures);
+    } while (!pageEnd);
   };
 
   var changeFilter = function(evt) {
     if (evt.target.classList.contains('filters-radio')) {
       picturesContainer.innerHTML = '';
       pageNumber = 0;
-      loadPictures(evt.target.id, pageNumber++);
+      activeFilter = evt.target.id;
+      loadPictures(activeFilter, pageNumber++);
     }
   };
 
-  var lastCall = Date.now();
-
-  window.addEventListener('scroll', function() {
+  var getEndPage = function() {
     if (Date.now() - lastCall >= THROTTLE_TIMEOUT) {
-      if (footer.getBoundingClientRect().bottom - window.innerHeight <= GAP) {
+      if (footer.getBoundingClientRect().top - window.innerHeight <= GAP) {
         loadPictures(activeFilter, pageNumber++);
       }
       lastCall = Date.now();
     }
-  });
+  };
 
   filters.addEventListener('change', changeFilter, true);
+  window.addEventListener('scroll', getEndPage);
   loadPictures(activeFilter, pageNumber++);
 });
