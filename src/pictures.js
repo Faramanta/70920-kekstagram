@@ -33,7 +33,6 @@ define(['./load', './picture', './gallery'], function(
       loadStart = false;
     }
 
-    console.log(loadStart);
     gallery.setPictures(pictures);
     filters.classList.remove('hidden');
   };
