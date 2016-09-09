@@ -13,8 +13,10 @@ define(['./load', './picture', './gallery'], function(
   var GAP = 200;
   var THROTTLE_TIMEOUT = 100;
   var lastCall = Date.now();
+  var loadStart = true;
 
   var getPictures = function(pictures) {
+
     if (!filters.classList.contains('hidden')) {
       filters.classList.add('hidden');
     }
@@ -27,6 +29,11 @@ define(['./load', './picture', './gallery'], function(
       picturesContainer.appendChild(picture.element);
     });
 
+    if (pictures.length === 0) {
+      loadStart = false;
+    }
+
+    console.log(loadStart);
     gallery.setPictures(pictures);
     filters.classList.remove('hidden');
   };
@@ -44,7 +51,7 @@ define(['./load', './picture', './gallery'], function(
     }, function(data) {
       getPictures(data);
 
-      if (pageEnd()) {
+      if (pageEnd() && loadStart) {
         recursiveLoad(filter, ++currentPageNumber);
         pageNumber++;
       }
@@ -52,11 +59,13 @@ define(['./load', './picture', './gallery'], function(
   };
 
   var loadPictures = function(filter, currentPageNumber) {
-    load(PICTURES_LOAD_URL, {
-      from: currentPageNumber * PAGE_SIZE,
-      to: currentPageNumber * PAGE_SIZE + PAGE_SIZE,
-      filter: filter
-    }, getPictures);
+    if (loadStart) {
+      load(PICTURES_LOAD_URL, {
+        from: currentPageNumber * PAGE_SIZE,
+        to: currentPageNumber * PAGE_SIZE + PAGE_SIZE,
+        filter: filter
+      }, getPictures);
+    }
   };
 
   var changeFilter = function(evt) {
@@ -64,6 +73,7 @@ define(['./load', './picture', './gallery'], function(
       picturesContainer.innerHTML = '';
       pageNumber = 0;
       activeFilter = evt.target.id;
+      loadStart = true;
       recursiveLoad(activeFilter, pageNumber++);
     }
   };

@@ -12,13 +12,14 @@ module.exports = function(list, filterID) {
       var currentDate = Date.now();
       var threeDays = 3*24*60*60*1000;
 
-      list.filter(function(item) {
+      list = list.filter(function(item) {
         return currentDate - item.created <= threeDays;
       });
 
-      list.sort(function(a, b) {
+      list = list.sort(function(a, b) {
         return b.created - a.created;
       });
+
       break;
 
     case 'filter-discussed':
