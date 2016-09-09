@@ -36,14 +36,27 @@ define(['./load', './picture', './gallery'], function(
     return footer.getBoundingClientRect().top - window.innerHeight - GAP <= 0;
   };
 
+  var recursiveLoad = function(filter, currentPageNumber) {
+    load(PICTURES_LOAD_URL, {
+      from: currentPageNumber * PAGE_SIZE,
+      to: currentPageNumber * PAGE_SIZE + PAGE_SIZE,
+      filter: filter
+    }, function(data) {
+      getPictures(data);
+
+      if (pageEnd()) {
+        recursiveLoad(filter, ++currentPageNumber);
+        pageNumber++;
+      }
+    });
+  };
+
   var loadPictures = function(filter, currentPageNumber) {
-    do {
-      load(PICTURES_LOAD_URL, {
-        from: currentPageNumber * PAGE_SIZE,
-        to: currentPageNumber * PAGE_SIZE + PAGE_SIZE,
-        filter: filter
-      }, getPictures);
-    } while (!pageEnd);
+    load(PICTURES_LOAD_URL, {
+      from: currentPageNumber * PAGE_SIZE,
+      to: currentPageNumber * PAGE_SIZE + PAGE_SIZE,
+      filter: filter
+    }, getPictures);
   };
 
   var changeFilter = function(evt) {
@@ -51,7 +64,7 @@ define(['./load', './picture', './gallery'], function(
       picturesContainer.innerHTML = '';
       pageNumber = 0;
       activeFilter = evt.target.id;
-      loadPictures(activeFilter, pageNumber++);
+      recursiveLoad(activeFilter, pageNumber++);
     }
   };
 
@@ -66,5 +79,5 @@ define(['./load', './picture', './gallery'], function(
 
   filters.addEventListener('change', changeFilter, true);
   window.addEventListener('scroll', getEndPage);
-  loadPictures(activeFilter, pageNumber++);
+  recursiveLoad(activeFilter, pageNumber++);
 });

@@ -9,14 +9,14 @@ module.exports = function(list, filterID) {
       break;
 
     case 'filter-new':
-      var currentdate = Date.now();
+      var currentDate = Date.now();
       var threeDays = 3*24*60*60*1000;
 
-      list = list.filter(function(item) {
-        return currentdate - item.created <= threeDays;
+      list.filter(function(item) {
+        return currentDate - item.created <= threeDays;
       });
 
-      list = list.sort(function(a, b) {
+      list.sort(function(a, b) {
         return b.created - a.created;
       });
       break;
