@@ -191,13 +191,11 @@ define(function() {
             currentResizer = new Resizer(fileReader.result);
             currentResizer.setElement(resizeForm);
             uploadMessage.classList.add('invisible');
-
             uploadForm.classList.add('invisible');
             resizeForm.classList.remove('invisible');
 
             hideMessage();
           };
-
 
           fileReader.readAsDataURL(element.files[0]);
         } else {
@@ -256,7 +254,6 @@ define(function() {
       resizeForm.classList.remove('invisible');
     });
 
-
     /**
      * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
      * записав сохраненный фильтр в cookie.
@@ -271,8 +268,6 @@ define(function() {
       filterForm.classList.add('invisible');
       uploadForm.classList.remove('invisible');
     });
-
-
 
     var browserCookies = require('browser-cookies');
 
@@ -329,6 +324,20 @@ define(function() {
 
         saveFilterInCookie(selectedFilter);
       });
+
+      function updResizer() {
+        currentResizer.setConstraint(Number(leftInput.value), Number(topInput.value), Number(sizeInput.value));
+      }
+
+      function changeResizer() {
+        leftInput.value = currentResizer.getConstraint().x;
+        topInput.value = currentResizer.getConstraint().y;
+        sizeInput.value = currentResizer.getConstraint().side;
+        console.log(leftInput.value);
+      }
+
+      resizeForm.addEventListener('change', updResizer);
+      window.addEventListener('resizerchange', changeResizer);
     }
 
     cleanupResizer();
