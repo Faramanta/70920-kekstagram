@@ -269,6 +269,33 @@ define(function() {
       uploadForm.classList.remove('invisible');
     });
 
+    //Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
+     //выбранному значению в форме.
+    filterForm.addEventListener('change', function() {
+      if (!filterMap) {
+      // Ленивая инициализация. Объект не создается до тех пор, пока
+      // не понадобится прочитать его в первый раз, а после этого запоминается
+      // навсегда.
+        filterMap = {
+          'none': 'filter-none',
+          'chrome': 'filter-chrome',
+          'sepia': 'filter-sepia',
+          'marvin': 'filter-marvin'
+        };
+      }
+
+      var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
+        return item.checked;
+      })[0].value;
+
+      // Класс перезаписывается, а не обновляется через classList потому что нужно
+      // убрать предыдущий примененный класс. Для этого нужно или запоминать его
+      // состояние или просто перезаписывать.
+      filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+
+      saveFilterInCookie(selectedFilter);
+    });
+
     var browserCookies = require('browser-cookies');
 
     //Формирование и запись куки
@@ -285,7 +312,7 @@ define(function() {
       document.cookie = browserCookies.set('upload-filter', nameFilter, {expires: countDay});
     }
 
-    //возвращае имя фильтра из куки
+    //возвращает имя фильтра из куки
     function getFilterFromCookie() {
       var nameFilter = browserCookies.get('upload-filter');
       if (!nameFilter) {
@@ -296,44 +323,16 @@ define(function() {
         item.checked = (item.value === nameFilter);
       });
 
-      /**
-       * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
-       * выбранному значению в форме.
-       */
-      filterForm.addEventListener('change', function() {
-        if (!filterMap) {
-          // Ленивая инициализация. Объект не создается до тех пор, пока
-          // не понадобится прочитать его в первый раз, а после этого запоминается
-          // навсегда.
-          filterMap = {
-            'none': 'filter-none',
-            'chrome': 'filter-chrome',
-            'sepia': 'filter-sepia',
-            'marvin': 'filter-marvin'
-          };
-        }
-
-        var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
-          return item.checked;
-        })[0].value;
-
-        // Класс перезаписывается, а не обновляется через classList потому что нужно
-        // убрать предыдущий примененный класс. Для этого нужно или запоминать его
-        // состояние или просто перезаписывать.
-        filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-
-        saveFilterInCookie(selectedFilter);
-      });
+      filterForm.dispatchEvent(new Event('change'));
 
       function updResizer() {
         currentResizer.setConstraint(Number(leftInput.value), Number(topInput.value), Number(sizeInput.value));
       }
 
       function changeResizer() {
-        leftInput.value = currentResizer.getConstraint().x;
-        topInput.value = currentResizer.getConstraint().y;
-        sizeInput.value = currentResizer.getConstraint().side;
-        console.log(leftInput.value);
+        leftInput.value = Math.ceil(currentResizer.getConstraint().x);
+        topInput.value = Math.ceil(currentResizer.getConstraint().y);
+        sizeInput.value = Math.ceil(currentResizer.getConstraint().side);
       }
 
       resizeForm.addEventListener('change', updResizer);
@@ -345,3 +344,4 @@ define(function() {
     getFilterFromCookie();
   })();
 });
+
