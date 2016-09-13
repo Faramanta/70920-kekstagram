@@ -11,8 +11,6 @@ define(['./load', './picture', './gallery'], function(
   var footer = document.querySelector('footer');
   var activeFilter = 'filter-popular';
   var GAP = 200;
-  var THROTTLE_TIMEOUT = 100;
-  var lastCall = Date.now();
   var loadStart = true;
 
   var getPictures = function(pictures) {
@@ -77,16 +75,28 @@ define(['./load', './picture', './gallery'], function(
     }
   };
 
+  var setScrollEnabled = function() {
+    window.addEventListener('scroll', throttle(getEndPage, 100));
+  };
+
+  var scrollTimeout;
+
+  function throttle(func, timeout) {
+    return function() {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(function() {
+        func();
+      }, timeout);
+    };
+  }
+
   var getEndPage = function() {
-    if (Date.now() - lastCall >= THROTTLE_TIMEOUT) {
-      if (footer.getBoundingClientRect().top - window.innerHeight <= GAP) {
-        loadPictures(activeFilter, pageNumber++);
-      }
-      lastCall = Date.now();
+    if (footer.getBoundingClientRect().top - window.innerHeight <= GAP) {
+      loadPictures(activeFilter, pageNumber++);
     }
   };
 
   filters.addEventListener('change', changeFilter, true);
-  window.addEventListener('scroll', getEndPage);
+  setScrollEnabled();
   recursiveLoad(activeFilter, pageNumber++);
 });
