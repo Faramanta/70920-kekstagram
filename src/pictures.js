@@ -75,6 +75,7 @@ define(['./load', './picture', './gallery'], function(
       activeFilter = evt.target.id;
       localStorage.setItem('active-filter', activeFilter);
       loadStart = true;
+      gallery.clearList();
       recursiveLoad(activeFilter, pageNumber++);
     }
   };

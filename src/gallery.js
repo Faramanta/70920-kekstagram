@@ -12,12 +12,15 @@ define(function() {
     this.commentsCount = document.querySelector('.comments-count');
   };
 
+  Gallery.prototype.clearList = function() {
+    this.pictures = [];
+  };
+
   Gallery.prototype.setPictures = function(pictures) {
-    this.pictures = pictures;
+    this.pictures = this.pictures.concat(pictures);
   };
 
   Gallery.prototype.show = function(keyPicture) {
-
     this.onCloseClick();
     this.onPictureClick();
 
