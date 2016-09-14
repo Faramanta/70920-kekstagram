@@ -46,22 +46,25 @@ define(['./gallery'], function(gallery) {
 
   //конструктор
   var Picture = function(data, picture, keyPicture) {
-    var self = this;
     this.data = data;
     this.element = picture;
     this.key = keyPicture;
 
-    //обработчик клика по блоку с фотографией
-    this.element.onclick = function(event) {
-      event.preventDefault();
-      gallery.show(self.key);
-    };
-
-    //метод, который удаляет обработчики событий
-    this.remove = function() {
-      self.picture.onclick = null;
-    };
+    this.onClick = this.onClick.bind(this);
+    this.element.addEventListener('click', this.onClick);
   };
+
+  //обработчик клика по блоку с фотографией
+  Picture.prototype.onClick = function(event) {
+    event.preventDefault();
+    gallery.show(this.key);
+  };
+
+  //удаляение обработчиков событий
+  Picture.prototype.remove = function() {
+    this.element.removeEventListener('click', this.onClick);
+  };
+
 
   return {
     getPictureElement: getPictureElement,

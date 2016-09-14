@@ -17,14 +17,17 @@ define(['./load', './picture', './gallery'], function(
   var loadStart = true;
 
   var getPictures = function(pictures) {
-
     if (!filters.classList.contains('hidden')) {
       filters.classList.add('hidden');
     }
 
-    pictures.forEach(function(pictureData, keyPicture) {
+    var nextKeyPicture = gallery.getPicturesLength();
+
+    pictures.forEach(function(pictureData) {
       var pictureElement = pictureModule.getPictureElement(pictureData);
-      var picture = new pictureModule.Picture(pictureData, pictureElement, keyPicture);
+
+      var picture = new pictureModule.Picture(pictureData, pictureElement, nextKeyPicture);
+      nextKeyPicture++;
 
       //добавление в список DOM-элемента из свойства element
       picturesContainer.appendChild(picture.element);
