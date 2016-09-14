@@ -9,7 +9,10 @@ define(['./load', './picture', './gallery'], function(
   var PAGE_SIZE = 12;
   var pageNumber = 0;
   var footer = document.querySelector('footer');
-  var activeFilter = 'filter-popular';
+  var activeFilter = localStorage.getItem('active-filter') || 'filter-popular';
+  var filterRadio = document.getElementById(activeFilter);
+  filterRadio.checked = true;
+
   var GAP = 200;
   var loadStart = true;
 
@@ -70,6 +73,7 @@ define(['./load', './picture', './gallery'], function(
       picturesContainer.innerHTML = '';
       pageNumber = 0;
       activeFilter = evt.target.id;
+      localStorage.setItem('active-filter', activeFilter);
       loadStart = true;
       recursiveLoad(activeFilter, pageNumber++);
     }
