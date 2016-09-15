@@ -10,16 +10,26 @@ define(function() {
     this.galleryOverlayImage = document.querySelector('.gallery-overlay-image');
     this.likesCount = document.querySelector('.likes-count');
     this.commentsCount = document.querySelector('.comments-count');
+
+    this.onCloseClick = this.onCloseClick.bind(this);
+    this.onPictureClick = this.onPictureClick.bind(this);
   };
 
   Gallery.prototype.setPictures = function(pictures) {
-    this.pictures = pictures;
+    this.pictures = this.pictures.concat(pictures);
+  };
+
+  Gallery.prototype.getPicturesLength = function() {
+    return this.pictures.length;
+  };
+
+  Gallery.prototype.clearList = function() {
+    this.pictures = [];
   };
 
   Gallery.prototype.show = function(keyPicture) {
-
-    this.onCloseClick();
-    this.onPictureClick();
+    this.galleryOverlayClose.addEventListener('click', this.onCloseClick);
+    this.galleryOverlayImage.addEventListener('click', this.onPictureClick);
 
     this.galleryOverlay.classList.remove('invisible');
     this.setActivePicture(keyPicture);
@@ -28,8 +38,8 @@ define(function() {
   Gallery.prototype.hide = function() {
     this.galleryOverlay.classList.add('invisible');
 
-    this.galleryOverlayClose.onclick = null;
-    this.galleryOverlayImage.onclick = null;
+    this.galleryOverlayClose.removeEventListener('click', this.onCloseClick);
+    this.galleryOverlayImage.removeEventListener('click', this.onPictureClick);
   };
 
   Gallery.prototype.setActivePicture = function(keyPicture) {
@@ -38,6 +48,7 @@ define(function() {
     }
 
     this.activePicture = keyPicture;
+
     this.galleryOverlayImage.src = this.pictures[keyPicture].url;
     this.likesCount.textContent = this.pictures[keyPicture].likes;
     this.commentsCount.textContent = this.pictures[keyPicture].comments;
@@ -45,28 +56,21 @@ define(function() {
 
   //Обработчик клика по Закрыть
   Gallery.prototype.onCloseClick = function() {
-    var self = this;
-
-    this.galleryOverlayClose.onclick = function() {
-      self.hide();
-    };
+    this.hide();
   };
 
   //Обработчик, который показывает следующее фото по клику на текущее
   //или показывает первое фото
   Gallery.prototype.onPictureClick = function() {
-    var self = this;
     var nextKeyPicture;
 
-    this.galleryOverlayImage.onclick = function() {
-      if (self.activePicture >= self.activePicture.length - 1) {
-        nextKeyPicture = 0;
-      } else {
-        nextKeyPicture = self.activePicture + 1;
-      }
+    if (this.activePicture >= this.pictures.length - 1) {
+      nextKeyPicture = 0;
+    } else {
+      nextKeyPicture = this.activePicture + 1;
+    }
 
-      self.setActivePicture(nextKeyPicture);
-    };
+    this.setActivePicture(nextKeyPicture);
   };
 
   return new Gallery();
