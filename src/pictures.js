@@ -29,7 +29,7 @@ define(['./load', './picture', './gallery'], function(
       nextKeyPicture++;
 
       //добавление в список DOM-элемента из свойства element
-      picturesContainer.appendChild(picture.element);
+      picture.add(picturesContainer);
     });
 
     if (pictures.length === 0) {

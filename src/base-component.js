@@ -15,6 +15,6 @@ define(function() {
     this.element.parentNode.removeChild(this.element);
   };
 
-  return new BaseComponent();
+  return BaseComponent;
 
 });

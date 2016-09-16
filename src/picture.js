@@ -47,7 +47,6 @@ define(['./gallery', './base-component', './utils'], function(gallery, BaseCompo
   //конструктор
   var Picture = function(data, picture, keyPicture) {
     this.data = data;
-   // this.element = picture;
     this.key = keyPicture;
 
     BaseComponent.call(this, getPictureElement(data));
@@ -67,8 +66,8 @@ define(['./gallery', './base-component', './utils'], function(gallery, BaseCompo
   //удаляение обработчиков событий
   Picture.prototype.remove = function() {
     this.element.removeEventListener('click', this.onClick);
+    BaseComponent.prototype.remove.call(this);
   };
-
 
   return {
     getPictureElement: getPictureElement,
