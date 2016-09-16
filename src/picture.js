@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./gallery'], function(gallery) {
+define(['./gallery', './base-component', './utils'], function(gallery, BaseComponent, utils) {
 
   var IMAGE_LOAD_TIMEOUT = 10000;
 
@@ -47,12 +47,16 @@ define(['./gallery'], function(gallery) {
   //конструктор
   var Picture = function(data, picture, keyPicture) {
     this.data = data;
-    this.element = picture;
+   // this.element = picture;
     this.key = keyPicture;
+
+    BaseComponent.call(this, getPictureElement(data));
 
     this.onClick = this.onClick.bind(this);
     this.element.addEventListener('click', this.onClick);
   };
+
+  utils.inherit(Picture, BaseComponent);
 
   //обработчик клика по блоку с фотографией
   Picture.prototype.onClick = function(event) {

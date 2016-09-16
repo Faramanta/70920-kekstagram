@@ -25,7 +25,6 @@ define(['./load', './picture', './gallery'], function(
 
     pictures.forEach(function(pictureData) {
       var pictureElement = pictureModule.getPictureElement(pictureData);
-
       var picture = new pictureModule.Picture(pictureData, pictureElement, nextKeyPicture);
       nextKeyPicture++;
 
