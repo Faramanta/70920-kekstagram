@@ -25,12 +25,11 @@ define(['./load', './picture', './gallery'], function(
 
     pictures.forEach(function(pictureData) {
       var pictureElement = pictureModule.getPictureElement(pictureData);
-
       var picture = new pictureModule.Picture(pictureData, pictureElement, nextKeyPicture);
       nextKeyPicture++;
 
       //добавление в список DOM-элемента из свойства element
-      picturesContainer.appendChild(picture.element);
+      picture.add(picturesContainer);
     });
 
     if (pictures.length === 0) {
