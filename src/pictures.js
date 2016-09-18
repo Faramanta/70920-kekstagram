@@ -1,7 +1,7 @@
 'use strict';
 
-define(['./load', './picture', './gallery'], function(
-  load, pictureModule, gallery) {
+define(['./load', './picture', './gallery', './picture-data'], function(
+  load, pictureModule, gallery, PictureObject) {
 
   var picturesContainer = document.querySelector('.pictures');
   var filters = document.querySelector('.filters');
@@ -24,8 +24,9 @@ define(['./load', './picture', './gallery'], function(
     var nextKeyPicture = gallery.getPicturesLength();
 
     pictures.forEach(function(pictureData) {
-      var pictureElement = pictureModule.getPictureElement(pictureData);
-      var picture = new pictureModule.Picture(pictureData, pictureElement, nextKeyPicture);
+      var pictureObject = new PictureObject(pictureData, nextKeyPicture);
+      var pictureElement = pictureModule.getPictureElement(pictureObject);
+      var picture = new pictureModule.Picture(pictureObject, pictureElement);
       nextKeyPicture++;
 
       //добавление в список DOM-элемента из свойства element

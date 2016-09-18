@@ -30,7 +30,7 @@ define(function() {
   Gallery.prototype.show = function(keyPicture) {
     this.galleryOverlayClose.addEventListener('click', this.onCloseClick);
     this.galleryOverlayImage.addEventListener('click', this.onPictureClick);
-
+    this.likesCount.addEventListener('click', this.onLikesClick);
     this.galleryOverlay.classList.remove('invisible');
     this.setActivePicture(keyPicture);
   };

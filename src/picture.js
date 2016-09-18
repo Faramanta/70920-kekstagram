@@ -13,7 +13,7 @@ define(['./gallery', './base-component', './utils'], function(gallery, BaseCompo
     elementToClone = templateElement.querySelector('.picture');
   }
 
-  var getPictureElement = function(data) {
+  function getPictureElement(data) {
     var element = elementToClone.cloneNode(true);
     element.querySelector('.picture-comments').textContent = data.comments;
     element.querySelector('.picture-likes').textContent = data.likes;
@@ -42,14 +42,13 @@ define(['./gallery', './base-component', './utils'], function(gallery, BaseCompo
     }, IMAGE_LOAD_TIMEOUT);
 
     return element;
-  };
+  }
 
   //конструктор
-  var Picture = function(data, picture, keyPicture) {
+  var Picture = function(data) {
     this.data = data;
-    this.key = keyPicture;
-
-    BaseComponent.call(this, getPictureElement(data));
+    this.likesCount = document.querySelector('.likes-count');
+    BaseComponent.call(this, getPictureElement(this.data));
 
     this.onClick = this.onClick.bind(this);
     this.element.addEventListener('click', this.onClick);
@@ -60,10 +59,10 @@ define(['./gallery', './base-component', './utils'], function(gallery, BaseCompo
   //обработчик клика по блоку с фотографией
   Picture.prototype.onClick = function(event) {
     event.preventDefault();
-    gallery.show(this.key);
+    gallery.show(this.data.getKeyPicture());
   };
 
-  //удаляение обработчиков событий
+  //удаление обработчиков событий
   Picture.prototype.remove = function() {
     this.element.removeEventListener('click', this.onClick);
     BaseComponent.prototype.remove.call(this);
