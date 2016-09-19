@@ -7,6 +7,7 @@ define(function() {
     this.comments = this.data.comments;
     this.likes = this.data.likes;
     this.url = this.data.url;
+    this.liked = false;
   };
 
   PictureObject.prototype.getKeyPicture = function() {
@@ -18,10 +19,12 @@ define(function() {
   };
 
   PictureObject.prototype.setLikesCount = function(liked) {
-    if (liked) {
+    if (!liked) {
       this.data.likes++;
+      this.liked = true;
     } else {
       this.data.likes--;
+      this.liked = false;
     }
   };
 

@@ -15,29 +15,30 @@ define(['./gallery', './base-component', './utils'], function(gallery, BaseCompo
 
   function getPictureElement(data) {
     var element = elementToClone.cloneNode(true);
+
     element.querySelector('.picture-comments').textContent = data.comments;
     element.querySelector('.picture-likes').textContent = data.likes;
 
-    var backgroundImage = new Image();
-    var backgroundLoadTimeout;
+    var image = new Image(182, 182);
+    var imageLoadTimeout;
 
     // обработчик успешной загрузки
-    backgroundImage.onload = function(evt) {
-      clearTimeout(backgroundLoadTimeout);
-      element.style.backgroundImage = 'url(\'' + evt.target.src + '\')';
-      element.style.backgroundSize = '182px';
+    image.onload = function(evt) {
+      clearTimeout(imageLoadTimeout);
+      element.href = evt.target.src;
+      element.replaceChild(image, element.querySelector('img'));
     };
 
     //обработчик ошибки загрузки
-    backgroundImage.onError = function() {
+    image.onError = function() {
       element.classList.add('picture-load-failure');
     };
 
-    backgroundImage.src = data.url;
+    image.src = data.url;
 
     //таймер
-    backgroundLoadTimeout = setTimeout(function() {
-      backgroundImage.src = '';
+    imageLoadTimeout = setTimeout(function() {
+      element.querySelector('img').src = '';
       element.classList.add('picture-load-failure');
     }, IMAGE_LOAD_TIMEOUT);
 
@@ -47,7 +48,10 @@ define(['./gallery', './base-component', './utils'], function(gallery, BaseCompo
   //конструктор
   var Picture = function(data) {
     this.data = data;
+    this.key = this.data.key;
     this.likesCount = document.querySelector('.likes-count');
+    this.pictureLikes = document.querySelector('.picture-likes');
+
     BaseComponent.call(this, getPictureElement(this.data));
 
     this.onClick = this.onClick.bind(this);
