@@ -3,7 +3,6 @@
 define(['./gallery', './base-component', './utils'], function(gallery, BaseComponent, utils) {
 
   var IMAGE_LOAD_TIMEOUT = 10000;
-
   var templateElement = document.querySelector('#picture-template');
   var elementToClone;
 
