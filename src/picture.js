@@ -13,43 +13,46 @@ define(['./gallery', './base-component', './utils'], function(gallery, BaseCompo
     elementToClone = templateElement.querySelector('.picture');
   }
 
-  var getPictureElement = function(data) {
+  function getPictureElement(data) {
     var element = elementToClone.cloneNode(true);
+
     element.querySelector('.picture-comments').textContent = data.comments;
     element.querySelector('.picture-likes').textContent = data.likes;
 
-    var backgroundImage = new Image();
-    var backgroundLoadTimeout;
+    var image = new Image(182, 182);
+    var imageLoadTimeout;
 
     // обработчик успешной загрузки
-    backgroundImage.onload = function(evt) {
-      clearTimeout(backgroundLoadTimeout);
-      element.style.backgroundImage = 'url(\'' + evt.target.src + '\')';
-      element.style.backgroundSize = '182px';
+    image.onload = function(evt) {
+      clearTimeout(imageLoadTimeout);
+      element.href = evt.target.src;
+      element.replaceChild(image, element.querySelector('img'));
     };
 
     //обработчик ошибки загрузки
-    backgroundImage.onError = function() {
+    image.onError = function() {
       element.classList.add('picture-load-failure');
     };
 
-    backgroundImage.src = data.url;
+    image.src = data.url;
 
     //таймер
-    backgroundLoadTimeout = setTimeout(function() {
-      backgroundImage.src = '';
+    imageLoadTimeout = setTimeout(function() {
+      element.querySelector('img').src = '';
       element.classList.add('picture-load-failure');
     }, IMAGE_LOAD_TIMEOUT);
 
     return element;
-  };
+  }
 
   //конструктор
-  var Picture = function(data, picture, keyPicture) {
+  var Picture = function(data) {
     this.data = data;
-    this.key = keyPicture;
+    this.key = this.data.key;
+    this.likesCount = document.querySelector('.likes-count');
+    this.pictureLikes = document.querySelector('.picture-likes');
 
-    BaseComponent.call(this, getPictureElement(data));
+    BaseComponent.call(this, getPictureElement(this.data));
 
     this.onClick = this.onClick.bind(this);
     this.element.addEventListener('click', this.onClick);
@@ -60,10 +63,10 @@ define(['./gallery', './base-component', './utils'], function(gallery, BaseCompo
   //обработчик клика по блоку с фотографией
   Picture.prototype.onClick = function(event) {
     event.preventDefault();
-    gallery.show(this.key);
+    gallery.show(this.data.getKeyPicture());
   };
 
-  //удаляение обработчиков событий
+  //удаление обработчиков событий
   Picture.prototype.remove = function() {
     this.element.removeEventListener('click', this.onClick);
     BaseComponent.prototype.remove.call(this);
